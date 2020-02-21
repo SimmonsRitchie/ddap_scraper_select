@@ -12,7 +12,7 @@ Python script built with Scrapy to scrape inspections for specific facilities fr
 
 1. Open the terminal. Clone the project repo:
 
-    `git clone https://github.com/SimmonsRitchie/ddap_scraper.git`
+    `git clone https://github.com/SimmonsRitchie/ddap_scraper_select.git`
 
 2. If you don't have pipenv installed on your machine, run:
 
@@ -20,7 +20,7 @@ Python script built with Scrapy to scrape inspections for specific facilities fr
 
 3. Navigate into the project directory:
 
-    `cd ddap_scraper`
+    `cd ddap_scraper_select`
      
 4. Use pipenv to create a virtual environment and install the project 
 dependencies. Run:
