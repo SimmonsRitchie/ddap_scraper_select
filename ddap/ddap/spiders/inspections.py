@@ -3,7 +3,7 @@ import scrapy
 from scrapy.http import FormRequest
 from ..items import DdapItem
 
-
+# TODO: Adapt scraper to only scrape inspections for specific providers
 
 class InspectionsSpider(scrapy.Spider):
     name = 'inspections'
