@@ -11,52 +11,25 @@ class InspectionsSpider(scrapy.Spider):
 
     def parse(self, response):
 
-        # Getting all counties with the exception of first, '-All'
-        county_list = response.css('select#dropCounties option::attr(value)').extract()[1:]
-        self.log(f"Facilities from the following providers will be scraped: {county_list}")
+        list_of_facilities = ['S4J66601','U7N36601']
 
-        county_list = [county.upper() for county in county_list]
+        self.log(f'Getting the following facilities...{list_of_facilities}')
 
-        for county in county_list:
+        for count, facility_id in enumerate(list_of_facilities):
+            self.log(f'Scraping facility ID: {facility_id}')
+            item = DdapItem()
+            item['facility_id'] = facility_id
 
-            yield FormRequest(url="http://sais.health.pa.gov/commonpoc/Content/PublicWeb/DAFacilityInfo.aspx", formdata={
-                'radio': 'on',
-                'dropCounties': county,
-                'btnSubmit2': 'Find'
-            }, callback=self.parse_provider_list, meta={'county': county})
+            url_survey_list = f"http://sais.health.pa.gov/commonpoc/Content/PublicWeb/DASurveyList.aspx?facid={facility_id}"
 
-
-    def parse_provider_list(self,response):
-        county = response.meta.get('county')
-        self.log(f'Getting facilities in {county}...')
-
-        fac_info_tables = response.css('form#frmFacInfo > table')
-
-        if fac_info_tables:
-            self.log(f'{county } County: Facilities found')
-            rows = fac_info_tables[1].css('tr')
-            rows_without_header = rows[1:]
-
-            for count, row in enumerate(rows_without_header):
-                item = DdapItem()
-                facility_id = row.css('td:nth-child(2) a::attr(href)').re_first(r'facid=(.*)')
-                item['facility_name'] = row.css('td:nth-child(2) b::text').extract_first()
-                item['facility_id'] = facility_id
-                item['facility_county'] = county
-
-                url_survey_list = f"http://sais.health.pa.gov/commonpoc/Content/PublicWeb/DASurveyList.aspx?facid={facility_id}"
-
-                yield response.follow(url_survey_list, callback=self.parse_survey_list,
-                                      meta={'item': item.copy()})
-        else:
-            self.log(f'{county } County: No facilities found!')
-
+            yield response.follow(url_survey_list, callback=self.parse_survey_list,
+                                  meta={'item': item.copy()})
 
 
     def parse_survey_list(self,response):
 
         item = response.meta.get('item')
-        self.log(f"{item['facility_id']} - {item['facility_name']}: parsing survey list")
+        self.log(f"{item['facility_id']}: parsing survey list")
 
         surveys = response.css('form#frmSurveyList table a#A1')
 
@@ -71,7 +44,7 @@ class InspectionsSpider(scrapy.Spider):
 
     def parse_survey(self, response):
         item = response.meta.get('item')
-        self.log(f"{item['facility_id']} - {item['facility_name']}: parsing survey page")
+        self.log(f"{item['facility_id']}: parsing survey page")
 
         item['initial_comments'] = response.css('tr:nth-child(2) td:nth-child(1)::text').extract_first()
         rows_without_initial_comments = response.css('form#frmSurveyDetails > table > tr:nth-child(2) ~ tr')
