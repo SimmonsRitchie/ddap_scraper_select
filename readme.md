@@ -3,6 +3,8 @@
 Python script built with Scrapy to scrape inspections for specific facilities from Pa. Department of Drug and Alcohol
  Programs website. This program is a companion to [ddap_scraper](https://github.com/SimmonsRitchie/ddap_scraper
  ), which scrapes _ALL_ facilities available on the DDAP website rather than specific providers.
+ 
+ The facilities selected for scraping are listed in a .csv.
 
 #### Requirements
 
