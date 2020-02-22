@@ -10,7 +10,7 @@ import scrapy
 
 class DdapItem(scrapy.Item):
     # define the fields for your item here like:
-    # facility_name = scrapy.Field()
+    facility_name = scrapy.Field()
     facility_id = scrapy.Field()
     # facility_county = scrapy.Field()
     event_id = scrapy.Field()
