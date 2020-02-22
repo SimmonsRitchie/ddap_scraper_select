@@ -27,7 +27,7 @@ dependencies. Run:
 
     `pipenv install`
 
-5. Update 'facility_list.csv' in ddap/ddap/input
+5. Edit the 'facility_id' field in 'ddap/ddap/input/facility_list.csv' to scrape specific facilities.
 
 #### Run
 
