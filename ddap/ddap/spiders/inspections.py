@@ -10,7 +10,7 @@ class InspectionsSpider(scrapy.Spider):
 
     def parse(self, response):
 
-        csv_path = 'ddap/input/facility_list.csv'
+        csv_path = 'input/facility_list.csv'
         self.log(f'Reading list of facilities from: {csv_path}')
         df = pd.read_csv(csv_path)
         list_of_facilities = df['facility_id'].to_list()

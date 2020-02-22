@@ -27,6 +27,8 @@ dependencies. Run:
 
     `pipenv install`
 
+5. Update 'facility_list.csv' in ddap/ddap/input
+
 #### Run
 
 This project uses Scrapy and takes advantage of its excellent CLI.

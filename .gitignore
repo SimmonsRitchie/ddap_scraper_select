@@ -1,5 +1,7 @@
 __pycache__/
 .idea/
 *.csv
+!*/input/*.csv
 ddap/logs/*.log
 !ddap/logs/.gitkeep
+!*/input/.gitkeep
