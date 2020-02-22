@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.http import FormRequest
+import pandas as pd
 from ..items import DdapItem
-
-# TODO: Adapt scraper to only scrape inspections for specific providers
 
 class InspectionsSpider(scrapy.Spider):
     name = 'inspections'
@@ -11,9 +10,12 @@ class InspectionsSpider(scrapy.Spider):
 
     def parse(self, response):
 
-        list_of_facilities = ['S4J66601','U7N36601']
+        csv_path = 'ddap/input/facility_list.csv'
+        self.log(f'Reading list of facilities from: {csv_path}')
+        df = pd.read_csv(csv_path)
+        list_of_facilities = df['facility_id'].to_list()
 
-        self.log(f'Getting the following facilities...{list_of_facilities}')
+        self.log(f'Scraping inspections for the following facilities...{list_of_facilities}')
 
         for count, facility_id in enumerate(list_of_facilities):
             self.log(f'Scraping facility ID: {facility_id}')
@@ -30,6 +32,8 @@ class InspectionsSpider(scrapy.Spider):
 
         item = response.meta.get('item')
         self.log(f"{item['facility_id']}: parsing survey list")
+
+        item['facility_name'] = response.css('center b:nth-of-type(2)::text').extract_first()
 
         surveys = response.css('form#frmSurveyList table a#A1')
 
